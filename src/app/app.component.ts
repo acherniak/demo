@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { ApiService } from './api.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styles: []
 })
 export class AppComponent {
-  title = 'training';
+  title = "Alex's App";
+	constructor(api: ApiService) {}
+	fetch = () => {}
 }
