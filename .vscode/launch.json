@@ -9,9 +9,20 @@
 				"<node_internals>/**"
 			],
 			"program": "${workspaceFolder}\\alex.js",
+			"outFiles": []
+		},
+		{
+			"type": "pwa-node",
+			"request": "launch",
+			"name": "Test",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}\\test.js",
 			"outFiles": [
 				"${workspaceFolder}/**/*.js"
 			]
 		}
+
 	]
 }
