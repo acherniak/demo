@@ -3,9 +3,7 @@ const express = require('express'), { Pool } = require('pg'), Chance = require('
 
 pool.on('error', (err, client) => { console.error('Postgres error', err); process.exit(-1) })
 
-app.get('/staff', async (req, res) => {
-	res.send((await pool.query('select * from staff')).rows)
-})
+app.get('/staff', async (req, res) => res.send((await pool.query('select * from staff')).rows))
 
 app.put('/add/:n', async (req, res) => { let chance = new Chance(), name, n=req.params.n, IDs = [];
 	for (let i=0; i<n; i++) IDs.push((await pool.query('insert into staff(name, kind, dob, custom) values($1, 1, $2, $3) returning id', [name=chance.name(), chance.birthday(),
@@ -13,14 +11,13 @@ app.put('/add/:n', async (req, res) => { let chance = new Chance(), name, n=req.
 	res.send(IDs)
 })
 
-app.delete('/clear', (req, res) => {
-  res.send({})
-})
+app.delete('/clear', async (req, res) => { await pool.query('delete from staff'); res.send({}); })
 
-app.delete('/delete/:id', (req, res) => {
-  res.send({id: req.params.id})
-})
+app.delete('/delete/:id', async (req, res) => { let id = req.params.id; await pool.query('delete from staff where id=$1', [id]); res.send({ id }); })
 
+app.get('/', (req,res) => 
+res.redirect('/index.html')
+);
 app.use(express.static('dist'))
 
 app.listen(port, () => {

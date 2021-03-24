@@ -15,6 +15,9 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCardModule} from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { ApiService } from './api.service';
@@ -30,6 +33,7 @@ import { environment } from '../environments/environment';
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule,
 		MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule, MatDividerModule, MatSnackBarModule,
 		MatTableModule, MatPaginatorModule, MatSortModule, MatSidenavModule, MatFormFieldModule, MatInputModule,
+		MatBadgeModule, MatTooltipModule, MatCardModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [ApiService],

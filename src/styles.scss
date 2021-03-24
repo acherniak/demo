@@ -2,3 +2,4 @@
 
 html, body, app-root, mat-sidenav-container { height: 100%; } app-root	{ display: flex; flex-direction: column;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger { color:white; }
