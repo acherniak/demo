@@ -12,7 +12,7 @@ import { ApiService } from './api.service';
   styles: ['.mat-paginator {background-color:transparent;}']
 })
 export class AppComponent implements OnInit{
-  title = "Staff"; list = new MatTableDataSource<any>([]); displCols =['id','name','dob','email','phone','adr','city','state'];
+  title = "Alex's Staff"; list = new MatTableDataSource<any>([]); displCols =['id','name','dob','email','phone','adr','city','state'];
 	curRow: any = {};
 	@ViewChild(MatPaginator) paginator!: MatPaginator; @ViewChild(MatSort) sort!: MatSort;
 	@ViewChild(MatSidenav) sidenav!: MatSidenav;
@@ -37,4 +37,6 @@ export class AppComponent implements OnInit{
 		let list = this.list.data, n = list.findIndex(row=>row.id==id);
 		if (n>=0) { list.splice(n, 1); this.show(list); this.sidenav.close(); }
 	});
+	viewSql = () => this.api.getHttp('/staff/db').subscribe((res:any) =>
+		this.api.toast(`${res.ver}\ncreate table staff(${res.staff.map((col:string[])=>col.join(': ')).join(', ')})`));
 }
