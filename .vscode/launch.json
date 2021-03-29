@@ -4,11 +4,21 @@
 		{
 			"type": "pwa-node",
 			"request": "launch",
-			"name": "Alex",
+			"name": "pg",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"program": "${workspaceFolder}\\alex.js",
+			"program": "${workspaceFolder}\\alex-pg.js",
+			"outFiles": []
+		},
+		{
+			"type": "pwa-node",
+			"request": "launch",
+			"name": "mongo",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}\\alex-mongo.js",
 			"outFiles": []
 		},
 		{

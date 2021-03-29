@@ -2,7 +2,7 @@
 	<mat-sidenav position="end" style="width:60%">
 		<mat-card style="display: flex;flex-direction: column;">
 			<div style="display:flex"><h1 style="flex:1">{{curRow?.name}}</h1>
-				<mat-icon (click)="delete(curRow.id)" [matTooltip]="'id: '+curRow.id" style="cursor: pointer;" color="warn">delete</mat-icon>
+				<mat-icon (click)="delete(curRow._id)" [matTooltip]="'id: '+curRow._id" style="cursor: pointer;" color="warn">delete</mat-icon>
 			</div>
 			<div style="display: flex;flex-direction: column;">
 				<mat-form-field *ngFor="let fld of ['name','dob','adr', 'phone','email'];index as n">
