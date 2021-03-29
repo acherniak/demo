@@ -6,14 +6,8 @@ const express = require('express'), { Pool } = require('pg'), Chance = require('
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/alex', {useNewUrlParser: true, useUnifiedTopology: true});
 let mongo = mongoose.connection,
-	schema = new mongoose.Schema({
-		name: String,
-		dob: Date,
-		custom: {
-			email: String,
-			phone: String,
-			adr: String
-		}
+	schema = new mongoose.Schema({ name: String, dob: Date,
+		custom: { email: String, phone: String, adr: String }
 	}),
 	person = new mongoose.model('person', schema);
 
@@ -28,18 +22,16 @@ app.get('/staff/db', async (req, res) => res.send({ ver: 'MongoDB',
 }))
 
 app.put('/add/:n', async (req, res) => { let chance = new Chance(), name, n=req.params.n, IDs = [];
-	for (let i=0; i<n; i++) IDs.push((await pool.query('insert into staff(name, kind, dob, custom) values($1, 1, $2, $3) returning id', [name=chance.name(), chance.birthday(),
-		{ email: name.split(' ').join('.').toLocaleLowerCase()+'@ac.com', adr: chance.address({short_suffix: true}), city: chance.city(), state: chance.state(), phone: chance.phone() }])).rows[0].id)
+	for (let i=0; i<n; i++) IDs.push((await person.create({ name: name=chance.name(), dob: chance.birthday(),
+		custom: { email: name.split(' ').join('.').toLocaleLowerCase()+'@ac.com', adr: chance.address({short_suffix: true}), city: chance.city(), state: chance.state(), phone: chance.phone() }
+	}))._id.toString());
 	res.send(IDs)
-})
+});
 
 app.delete('/clear', async (req, res) => person.deleteMany({}, (err) => res.send({})));
 
 app.delete('/delete/:id', async (req, res) => { let id = req.params.id;
-	person.deleteOne({_id:id}, 
-		err=> { 
-			if (err) console.log(err); else res.send({ id })
-});
+	person.deleteOne({_id:id}, err=> { if (err) console.log(err); else res.send({ id })});
 })
 
 app.get('/', (req,res) => res.redirect('/index.html'));
