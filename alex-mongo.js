@@ -1,20 +1,12 @@
-const { version } = require('typescript');
+const express = require('express'),Chance = require('chance'), app = express(), port = 3702,
+	mongoose = require('mongoose');
 
-const express = require('express'), { Pool } = require('pg'), Chance = require('chance'),
-	app = express(), port = 3702, pool = new Pool({ user: 'alex', password: 'pass'});
-
-const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1/alex', {useNewUrlParser: true, useUnifiedTopology: true});
 let mongo = mongoose.connection,
 	schema = new mongoose.Schema({ name: String, dob: Date,
 		custom: { email: String, phone: String, adr: String }
 	}),
 	person = new mongoose.model('person', schema);
-
-person.create({name: 'Jane Doe', custom: {}}, (err,res) => {
-	let aa = res._id.toString();
-})
-pool.on('error', (err, client) => { console.error('Postgres error', err); process.exit(-1) })
 
 app.get('/staff', async (req, res) => person.find({}, (err,staff) => res.send(staff.map(p=>p._doc))));
 app.get('/staff/db', async (req, res) => res.send({ ver: 'MongoDB', 
