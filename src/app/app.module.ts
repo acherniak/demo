@@ -18,22 +18,27 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatCardModule} from '@angular/material/card';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import { AppComponent } from './app.component';
-import { ApiService } from './api.service';
+import { ApiService, ConfirmDialog } from './api.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, ConfirmDialog
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule,
 		MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule, MatDividerModule, MatSnackBarModule,
 		MatTableModule, MatPaginatorModule, MatSortModule, MatSidenavModule, MatFormFieldModule, MatInputModule,
-		MatBadgeModule, MatTooltipModule, MatCardModule,
+		MatBadgeModule, MatTooltipModule, MatCardModule, MatProgressSpinnerModule,
+		MatDialogModule, MatDatepickerModule, MatNativeDateModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [ApiService],

@@ -11,11 +11,11 @@ import { DomSanitizer, Title } from '@angular/platform-browser';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styles: ['.mat-paginator {background-color:transparent;}', '.mat-column-avatar {width:40px;}',
-		'.svg { width:200px; margin:10% auto; } .svg:hover { width:500px }']
+		'.svg { width:200px; margin:0 auto; }', 'iframe {width:100%}']
 })
 export class AppComponent implements OnInit{
   title = "Alex's Staff"; list = new MatTableDataSource<any>([]); cols = ['_id','name','dob','email','phone','adr','city','state'];
-	displCols = ['avatar', ...this.cols]; curRow: any = {};
+	displCols = ['avatar', ...this.cols]; curRow: any = {}; working: boolean = false; frameUrl: any;
 	@ViewChild(MatPaginator) paginator!: MatPaginator; @ViewChild(MatSort) sort!: MatSort;
 	@ViewChild(MatSidenav) sidenav!: MatSidenav;
 	
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit{
 	ngOnInit(): void { this.init()
 		this.api.getHttp('info').subscribe((res:any) => this.titleService.setTitle(res.db));
 	}
-	show = (rows:any[]) => {
+	show = (rows:any[]) => { this.working = false;
 		this.list = new MatTableDataSource(rows);
 		this.list.paginator = this.paginator;
     this.list.sort = this.sort;
@@ -34,16 +34,15 @@ export class AppComponent implements OnInit{
 				avatar: !el.avatar?undefined:this.sanitizer.bypassSecurityTrustHtml(el.avatar),
 				email:cust.email,phone:cust.phone,adr:cust.adr,city:cust.city,state:cust.state}
 		})))
-	selRow = (row:any) => {
-		this.curRow = row; this.sidenav.open();
-		console.log(row.avatar);
-	}
-	add = (n:number) => this.api.putHttp('add/'+n, {}).subscribe((res:any) => this.init());
-	clear = () => this.api.deleteHttp('clear').subscribe((res:any) => this.init());
-	delete = (id:number) => this.api.deleteHttp('delete/'+id).subscribe((res:any) => {
-		let list = this.list.data, n = list.findIndex(row=>row._id==id);
-		if (n>=0) { list.splice(n, 1); this.show(list); this.sidenav.close(); }
-	});
+	selRow = (row:any) => { this.curRow = row; this.sidenav.open(); }
+	add = (n:number) => { this.working = true; this.api.putHttp('add/'+n, {}).subscribe((res:any) => this.init()); }
+	clear = () => this.api.confirm('ALL records will be deleted!', ()=>this.api.deleteHttp('clear').subscribe((res:any) => this.init()));
+	delete = () => this.api.confirm('Delete '+this.curRow.name, () => this.api.deleteHttp('delete/'+this.curRow._id)
+		.subscribe(() => { let list = this.list.data, n = list.findIndex(row=>row._id==this.curRow._id);
+			if (n>=0) { list.splice(n, 1); this.show(list); this.sidenav.close(); }
+		})
+	);
+	search = () => window.open('https://www.google.com/search?q='+this.curRow.name);
 	viewSql = () => this.api.getHttp('/staff/db').subscribe((res:any) =>
 		this.api.toast(`${res.ver}\n${res.staff})`));
 }
