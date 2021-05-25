@@ -1,4 +1,4 @@
-const express = require('express'), { Pool } = require('pg'), Chance = require('chance'),
+const express = require('express'), { Pool } = require('pg'), Chance = require('chance'), path = require('path'),
 	app = express(), got = require('got'), port = 3700, pool = new Pool({ user: 'alex', password: 'pass'});
 
 pool.on('error', (err, client) => { console.error('Postgres error', err); process.exit(-1) })
@@ -22,11 +22,11 @@ app.put('/add/:n', async (req, res) => { let chance = new Chance(), n=req.params
 	res.send(IDs)
 })
 
-app.delete('/clear', async (req, res) => { await pool.query('delete from staff'); res.send({}); })
+app.delete('/clear', async (req, res) => { await pool.query('TRUNCATE staff, aux RESTART IDENTITY'); res.send([]); })
 
 app.delete('/delete/:id', async (req, res) => { let id = req.params.id; await pool.query('delete from staff where _id=$1', [id]); res.send({ id }); })
 
-app.get('/', (req,res) => res.redirect('/index.html'));
+app.get('/', (req,res) => res.sendFile(path.join(__dirname, 'dist', 'index.html')));
 app.use(express.static('dist'))
 
 app.listen(port, () => {

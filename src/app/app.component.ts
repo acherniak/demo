@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatIconRegistry } from "@angular/material/icon";
 import { ApiService } from './api.service';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 
@@ -14,14 +15,16 @@ import { DomSanitizer, Title } from '@angular/platform-browser';
 		'.svg { width:200px; margin:0 auto; }', 'iframe {width:100%}']
 })
 export class AppComponent implements OnInit{
-  title = "Alex's Staff"; list = new MatTableDataSource<any>([]); cols = ['_id','name','dob','email','phone','adr','city','state'];
+  dbIcon = 'MongoDB'; list = new MatTableDataSource<any>([]); cols = ['_id','name','dob','email','phone','adr','city','state'];
 	displCols = ['avatar', ...this.cols]; curRow: any = {}; working: boolean = false; frameUrl: any;
 	@ViewChild(MatPaginator) paginator!: MatPaginator; @ViewChild(MatSort) sort!: MatSort;
 	@ViewChild(MatSidenav) sidenav!: MatSidenav;
 	
-	constructor(public api: ApiService, private sanitizer: DomSanitizer, private titleService: Title) {}
+	constructor(public api: ApiService, private sanitizer: DomSanitizer, private titleService: Title, private iconRegistry: MatIconRegistry) {
+		['PostgreSQL','MongoDB'].forEach(svg => this.iconRegistry.addSvgIcon( svg, this.sanitizer.bypassSecurityTrustResourceUrl(`assets/${svg}.svg`)));
+	}
 	ngOnInit(): void { this.init()
-		this.api.getHttp('info').subscribe((res:any) => this.titleService.setTitle(res.db));
+		this.api.getHttp('info').subscribe((res:any) => this.titleService.setTitle(this.dbIcon=res.db));
 	}
 	show = (rows:any[]) => { this.working = false;
 		this.list = new MatTableDataSource(rows);

@@ -1,5 +1,5 @@
 const express = require('express'),Chance = require('chance'), app = express(), port = 3701,
-	mongoose = require('mongoose'), got = require('got');//{ addAvatar } = require('./avatar');
+	mongoose = require('mongoose'), got = require('got'), path = require('path');
 
 mongoose.connect('mongodb://127.0.0.1/alex', {useNewUrlParser: true, useUnifiedTopology: true});
 let mongo = mongoose.connection,
@@ -33,7 +33,7 @@ app.delete('/delete/:id', async (req, res) => { let id = req.params.id;
 	person.deleteOne({_id:id}, err=> { if (err) console.log(err); else res.send({ id })});
 })
 
-app.get('/', (req,res) => res.redirect('/index.html'));
+app.get('/', (req,res) => res.sendFile(path.join(__dirname, 'dist', 'index.html')));
 app.use(express.static('dist'))
 
 app.listen(port, () => {
