@@ -1,12 +1,19 @@
-const express = require('express'), { Pool } = require('pg'), Chance = require('chance'), path = require('path'),
-	app = express(), got = require('got'), port = 3700, pool = new Pool({ user: 'alex', password: 'pass'});
+let express, Pool, Chance, path, app, got, port, pool;
+express = require('express');
+({Pool} = require('pg'));
+Chance = require('chance');
+path = require('path');
+app = express();
+got = require('got');
+port = 3700;
+pool = new Pool({user: 'alex', password: 'pass'});
 
 pool.on('error', (err, client) => { console.error('Postgres error', err); process.exit(-1) })
 
 app.get('/info', async (req, res) => res.send({db: 'PostgreSQL'}));
 app.get('/staff', async (req, res) => res.send((await pool.query('select _id, name, kind, custom, dob, avatar from staff left outer join aux on _id=id')).rows))
-app.get('/staff/db', async (req, res) => 
-	res.send({ ver: (await pool.query('select version()')).rows[0].version, 
+app.get('/staff/db', async (req, res) =>
+	res.send({ ver: (await pool.query('select version()')).rows[0].version,
 	staff: `create table staff(${(await pool.query({text:"select column_name, udt_name from INFORMATION_SCHEMA.COLUMNS where table_name='staff'", rowMode: 'array'})).rows.map(col=>col.join(': ')).join(', ')})`})
 );
 

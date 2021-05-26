@@ -7,12 +7,12 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ApiService {
   constructor(private http: HttpClient, private snackBar: MatSnackBar, private dialog: MatDialog) { }
-	toast = (msg: string) => this.snackBar.open(msg, 'OK', {duration:15000, panelClass: 'pre-wrap'});
-	getHttp = (url:string) => this.http.get(url);
-	putHttp = (url:string, data: Object) => this.http.put(url, data);
-	deleteHttp = (url:string) => this.http.delete(url);
-	confirm = (msg: string, act: ()=>void) => this.dialog.open(ConfirmDialog, { data: msg })
-		.afterClosed().subscribe((ok)=> { if (ok) act(); })
+  toast = (msg: string) => this.snackBar.open(msg, 'OK', {duration: 15000, panelClass: 'pre-wrap'});
+  getHttp = (url: string) => this.http.get(url);
+  putHttp = (url: string, data: object) => this.http.put(url, data);
+  deleteHttp = (url: string) => this.http.delete(url);
+  confirm = (msg: string, act: () => void) => this.dialog.open(ConfirmDialog, { data: msg })
+    .afterClosed().subscribe((ok) => { if (ok) { act(); } })
 }
 
 @Component({ selector: 'confirm',
